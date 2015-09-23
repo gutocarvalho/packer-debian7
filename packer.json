@@ -1,0 +1,69 @@
+{
+  "builders": [
+    {
+      "vm_name": "Debian7.9",
+      "guest_os_type": "Debian_64",
+      "iso_checksum_type": "md5",
+      "iso_checksum": "774d1fc8c5364e63b22242c33a89c1a3",
+      "iso_url": "http://localhost/isos/debian-7.9.0-amd64-netinst.iso",
+      "type": "virtualbox-iso",
+      "ssh_password": "vagrant",
+      "ssh_username": "vagrant",
+      "ssh_wait_timeout": "50000s",
+      "headless": "false",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "1024"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "4"
+        ]
+      ],
+      "http_directory": ".",
+      "boot_command": [
+        "<esc><wait>",
+        "install <wait>",
+        "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg <wait>",
+        "debian-installer=en_US <wait>",
+        "auto <wait>",
+        "locale=en_US <wait>",
+        "kbd-chooser/method=us <wait>",
+        "keyboard-configuration/xkb-keymap=us <wait>",
+        "netcfg/get_hostname={{ .Name }} <wait>",
+        "netcfg/get_domain=vagrantup.com <wait>",
+        "fb=false <wait>",
+        "debconf/frontend=noninteractive <wait>",
+        "console-setup/ask_detect=false <wait>",
+        "console-keymaps-at/keymap=us <wait>",
+        "<enter><wait>"
+      ],
+      "shutdown_command": "echo 'vagrant' | sudo -S /sbin/halt -h -p"
+    }
+  ],
+  "provisioners": [
+    {
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "scripts": [
+        "vagrant.sh",
+        "virtualbox.sh",
+        "sysadmin.sh",
+        "cleanup.sh"
+      ],
+      "type": "shell"
+    }
+  ],    
+  "post-processors": [
+        [{
+            "type": "vagrant",
+            "compression_level": 9,
+            "output": "../boxes/debian7x64.box"
+        }
+        ]
+    ]
+}
