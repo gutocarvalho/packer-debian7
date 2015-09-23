@@ -6,8 +6,8 @@ VAGRANTFILE_API_VERSION = "2"
  
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-		config.vm.hostname = "ubuntu1204.hacklab"
-		config.vm.box = "gutocarvalho/ubuntu1204x64"
+		config.vm.hostname = "debian7.hacklab"
+		config.vm.box = "gutocarvalho/debian7x64"
 
 		config.vm.provider "virtualbox" do |virtualbox|
 			virtualbox.customize [ "modifyvm", :id, "--cpus", "1" ]
