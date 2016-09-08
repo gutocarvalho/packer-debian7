@@ -1,11 +1,14 @@
 {
   "builders": [
     {
-      "vm_name": "Debian7.9",
+      "vm_name": "Debian7.11",
       "guest_os_type": "Debian_64",
       "iso_checksum_type": "md5",
-      "iso_checksum": "774d1fc8c5364e63b22242c33a89c1a3",
-      "iso_url": "http://localhost/isos/debian-7.9.0-amd64-netinst.iso",
+      "iso_checksum": "096c1c18b44c269808bd815d58c53c8f",
+      "iso_urls": [
+              "debian-7.11.0-amd64-netinst.iso",
+              "http://cdimage.debian.org/cdimage/archive/7.11.0/amd64/iso-cd/debian-7.11.0-amd64-netinst.iso"
+            ],
       "type": "virtualbox-iso",
       "ssh_password": "vagrant",
       "ssh_username": "vagrant",
@@ -57,13 +60,24 @@
       ],
       "type": "shell"
     }
-  ],    
+  ],
   "post-processors": [
-        [{
+        [
+          {
             "type": "vagrant",
             "compression_level": 9,
-            "output": "../boxes/debian7x64.box"
-        }
+            "output": "../debian7x64.box"
+          },
+          {
+            "type": "atlas",
+            "only": ["virtualbox-iso"],
+            "artifact": "gutocarvalho/debian7x64",
+            "artifact_type": "vagrant.box",
+            "metadata": {
+              "provider": "virtualbox",
+              "version": "0.0.4"
+            }
+          }
         ]
     ]
 }
